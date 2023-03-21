@@ -1,6 +1,7 @@
-from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import book
 from .serializers import book_serial, bookreate, update_book
@@ -20,6 +21,9 @@ class create_book(generics.CreateAPIView):
 
     queryset = book.objects.all()
     serializer_class = bookreate
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -28,7 +32,10 @@ class create_book(generics.CreateAPIView):
 class retrieve_book(generics.RetrieveAPIView):
     queryset = book.objects.all()
     serializer_class = book_serial
-    lookup_field = 'pk'
+    lookup_field = "pk"
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -39,8 +46,11 @@ class retrieve_book(generics.RetrieveAPIView):
 class update_book(generics.UpdateAPIView):
 
     queryset = book.objects.all()
-    lookup_field = 'id'
+    lookup_field = "id"
     serializer_class = update_book
+    permission_classes = [
+        IsAuthenticated
+    ]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
