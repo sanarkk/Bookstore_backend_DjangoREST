@@ -25,7 +25,6 @@ class CreateBookSerializer(serializers.Serializer):
 
 
 class UpdateBookSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = book
-        fields = ('id', 'book_name', 'price')
+        fields = ("id", "book_name", "price")
