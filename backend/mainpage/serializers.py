@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import book
 
 
-class book_serial(serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source="author.username")
 
     class Meta:
@@ -13,9 +13,10 @@ class book_serial(serializers.ModelSerializer):
             "price",
             "user_name",
         )
+        extra_kwargs = {"user_name": {"read_only": True}}
 
 
-class bookreate(serializers.Serializer):
+class CreateBookSerializer(serializers.Serializer):
     book_name = serializers.CharField()
     price = serializers.IntegerField()
 
@@ -23,7 +24,8 @@ class bookreate(serializers.Serializer):
         return book.objects.create(**validated_data)
 
 
-class update_book(serializers.ModelSerializer):
+class UpdateBookSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = book
-        fields = "__all__"
+        fields = ('id', 'book_name', 'price')

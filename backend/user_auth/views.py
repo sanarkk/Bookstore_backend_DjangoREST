@@ -1,12 +1,12 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render
-from rest_framework import generics, status
-from rest_framework.decorators import action
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .serializers import RegisterSerializer, LoginSerializer
-from django.contrib.auth.models import User, update_last_login
+
+from django.contrib.auth.models import User
 from django.contrib.auth import logout, login
+from django.core.exceptions import ObjectDoesNotExist
+
+from .serializers import RegisterSerializer, LoginSerializer
 
 
 # Create your views here.
@@ -52,7 +52,6 @@ class LoginAPI(generics.GenericAPIView):
         serializer = LoginSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
-        # print(serializer.validated_data)
         login(request, user)
         Token.objects.get_or_create(user=user)
         return Response({"status": "loggined"})

@@ -1,26 +1,26 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from .permissions import IsOwner
 from .models import book
-from .serializers import book_serial, bookreate, update_book
+from .serializers import BookSerializer, CreateBookSerializer, UpdateBookSerializer
 
 
 # Create your views here.
-class list_movies(generics.ListAPIView):
+class ListBooksAPI(generics.ListAPIView):
 
     queryset = book.objects.all()
-    serializer_class = book_serial
+    serializer_class = BookSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
 
-class create_book(generics.CreateAPIView):
+class CreateBookAPI(generics.CreateAPIView):
 
     queryset = book.objects.all()
-    serializer_class = bookreate
+    serializer_class = CreateBookSerializer
     permission_classes = [
         IsAuthenticated,
     ]
@@ -29,9 +29,9 @@ class create_book(generics.CreateAPIView):
         serializer.save(author=self.request.user)
 
 
-class retrieve_book(generics.RetrieveAPIView):
+class RetrieveBookAPI(generics.RetrieveAPIView):
     queryset = book.objects.all()
-    serializer_class = book_serial
+    serializer_class = BookSerializer
     lookup_field = "pk"
     permission_classes = [
         IsAuthenticated,
@@ -43,21 +43,19 @@ class retrieve_book(generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
-class update_book(generics.UpdateAPIView):
+class UpdateBookAPI(generics.UpdateAPIView):
 
     queryset = book.objects.all()
-    lookup_field = "id"
-    serializer_class = update_book
-    permission_classes = [
-        IsAuthenticated
-    ]
+    lookup_field = "pk"
+    serializer_class = UpdateBookSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(author=self.request.user)
             return Response({"message": "updated"})
         else:
             return Response({"message": "not updated"})

@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
-from rest_framework import serializers
 from django.contrib.auth.models import User
-from rest_framework.response import Response
+
+from rest_framework import serializers
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -21,10 +21,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ("username", "password")
 
     username = serializers.CharField(max_length=255)
     password = serializers.CharField(
@@ -49,5 +48,5 @@ class LoginSerializer(serializers.ModelSerializer):
             msg = 'Must include "username" and "password".'
             raise serializers.ValidationError(msg, code="authorization")
 
-        attrs['user'] = user
+        attrs["user"] = user
         return attrs
