@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import book
+from .models import book, order
+from django.contrib.auth.models import User
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -28,3 +29,16 @@ class UpdateBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = book
         fields = ("id", "book_name", "price")
+
+
+class CreateOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = order
+        fields = ("user", "book")
+        extra_kwargs = {"date": {"read_only": True}}
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name")

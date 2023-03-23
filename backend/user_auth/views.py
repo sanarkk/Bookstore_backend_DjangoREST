@@ -33,16 +33,14 @@ class RegisterAPI(generics.GenericAPIView):
 
 class LogoutAPI(generics.GenericAPIView):
     def get(self, request):
-        return self.logout(request)
+        return self.logout_user(request)
 
-    def logout(self, request):
-        try:
-            request.user.auth_token.delete()
-        except (AttributeError, ObjectDoesNotExist):
-            pass
+    def logout_user(self, request):
+        if logout(request) == None:
+            return Response({"response": "success"})
+        else:
+            return Response({"response": "failed"})
 
-        logout(request)
-        return Response({"response": "success"})
 
 
 class LoginAPI(generics.GenericAPIView):

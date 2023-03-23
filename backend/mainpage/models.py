@@ -12,3 +12,12 @@ class book(models.Model):
 
     def __str__(self):
         return self.book_name
+
+
+class order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(book, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} | {self.book.book_name}'
