@@ -32,10 +32,22 @@ class UpdateBookSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source="author.username")
+    book = serializers.CharField(source="book_name")
+
     class Meta:
         model = order
-        fields = ("user", "book")
-        extra_kwargs = {"date": {"read_only": True}}
+        fields = ("id", "user_name", "book")
+        extra_kwargs = {"user": {"read_only": True}, "book": {"read_only": True}}
+
+    def save(self, request, *args, **kwargs):
+        order = super().save(request)
+        book = self.data.get("book")
+        user = self.data.get("user")
+        order.book = book
+        order.user = user
+        order.save()
+        return order
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
