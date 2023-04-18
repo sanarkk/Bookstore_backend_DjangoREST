@@ -82,15 +82,16 @@ class CreateOrderAPI(generics.CreateAPIView):
 
     def create_order(self, request):
         instance = self.get_object()
-        serializer = CreateOrderSerializer(instance, data=self.request.data)
-        #print(instance)
-        #print(serializer.data)
+        serializer = CreateOrderSerializer(instance, data=request.data)
+        print(instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        print(serializer.data)
         return Response(serializer.data)
 
     #def perform_create(self, serializer):
-    #    serializer.save()
+    #    instance = self.get_object()
+    #    serializer.save(user=instance.author, book=instance.book_name)
 
 
 class ListUserInformation(generics.RetrieveAPIView):
