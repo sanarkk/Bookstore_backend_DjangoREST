@@ -9,7 +9,7 @@ from .serializers import (
     BookSerializer,
     CreateBookSerializer,
     UpdateBookSerializer,
-    CreateOrderSerializer,
+    OrderSerializer,
     UserProfileSerializer,
 )
 
@@ -20,7 +20,6 @@ class ListBooksAPI(generics.ListAPIView):
     serializer_class = BookSerializer
 
     def get(self, request, *args, **kwargs):
-        print(request.user)
         return self.list(request, *args, **kwargs)
 
 
@@ -68,7 +67,7 @@ class UpdateBookAPI(generics.UpdateAPIView):
 
 class CreateOrderAPI(generics.CreateAPIView):
     queryset = book.objects.all()
-    serializer_class = CreateOrderSerializer
+    serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = "pk"
 
@@ -82,16 +81,14 @@ class CreateOrderAPI(generics.CreateAPIView):
 
     def create_order(self, request):
         instance = self.get_object()
-        serializer = CreateOrderSerializer(instance, data=request.data)
-        print(instance)
+        serializer = OrderSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        print(serializer.data)
-        return Response(serializer.data)
-
-    #def perform_create(self, serializer):
-    #    instance = self.get_object()
-    #    serializer.save(user=instance.author, book=instance.book_name)
+        user_id = request.user
+        order.objects.create(
+            user=user_id,
+            book=instance,
+        )
+        return Response()
 
 
 class ListUserInformation(generics.RetrieveAPIView):
@@ -103,4 +100,16 @@ class ListUserInformation(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+class ListUserOrders(generics.ListAPIView):
+    queryset = order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated, IsMyProfile]
+
+    def get(self, request, *args, **kwargs):
+        orders = order.objects.filter(user=request.user)
+        serializer = OrderSerializer(orders, many=True)
+        print(serializer.data)
         return Response(serializer.data)
