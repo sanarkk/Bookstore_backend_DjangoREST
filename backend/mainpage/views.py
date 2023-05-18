@@ -97,11 +97,12 @@ class ListUserInformation(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
-    lookup_field = "pk"
+    # lookup_field = "pk"
 
     def get(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
+        user = User.objects.get(username=request.user.username)
+        print(user)
+        serializer = self.get_serializer(user)
         return Response(serializer.data)
 
 

@@ -42,7 +42,6 @@ class LogoutAPI(generics.GenericAPIView):
             return Response({"response": "failed"})
 
 
-
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginSerializer
 

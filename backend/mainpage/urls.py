@@ -15,6 +15,6 @@ urlpatterns = [
     path("update/<int:pk>", UpdateBookAPI.as_view()),
     path("main/<int:pk>", RetrieveBookAPI.as_view()),
     path("order/<int:pk>", CreateOrderAPI.as_view()),
-    path("my-profile/<int:pk>", ListUserInformation.as_view()),
+    path("my-profile/", ListUserInformation.as_view()),
     path("my-orders/", ListUserOrders.as_view()),
 ]
