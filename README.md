@@ -1,2 +1,29 @@
-# backend-bookstore-drf
-Project created by Django Rest Framework + React
+# Bookstore Backend
+*Project created by using Django Rest Framework technologies*
+
+> About
+
+This backend was developed for book store where users can order ans sell books.
+
+> How to start
+
+- pip install -r requirements.txt
+- cd backend/
+- ./manage.py migrate
+- ./manage.py run server
+
+> Routes
+
+- 127.0.0.1:8000/main/ ---> *Page which displays all books.*
+- 127.0.0.1:8000/create/ ---> *Page which allows to place book for sale, but only after completed auth.*
+- 127.0.0.1:8000/update/<book_id>/ ---> *Page which allows to update information about book which you placed, but only after completed auth and authotiry verification.*
+- 127.0.0.1:8000/main/<book_id>/ ---> *Page which allows to check information about certain book, but only after completed auth.*
+- 127.0.0.1:8000/order/<book_id>/ ---> *Page which allows to order certain book, but only after completed auth.*
+- 127.0.0.1:8000/my-profile/ ---> *Page which allows to see information about profile, but only after completed auth.*
+- 127.0.0.1:8000/my-orders/ ---> *Page which displays all books which the user ordered.*
+- 127.0.0.1:8000/my-orders/[POST] ---> *Page which allows to clear own history of orders.*
+- 127.0.0.1:8000/auth/register/ ---> *Page which allows to register an account.*
+- 127.0.0.1:8000/auth/login/ ---> *Page which allows to login.*
+- 127.0.0.1:8000/auth/logout/ ---> *Page which allows to logout.*
+
+<sup>created by sanarkk</sup>
