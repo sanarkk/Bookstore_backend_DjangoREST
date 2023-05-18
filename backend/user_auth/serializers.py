@@ -5,6 +5,9 @@ from rest_framework import serializers
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True, allow_null=False)
+    last_name = serializers.CharField(required=True, allow_null=False)
+
     class Meta:
         model = User
         fields = ("id", "username", "password", "first_name", "last_name")

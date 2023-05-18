@@ -87,6 +87,8 @@ class CreateOrderAPI(generics.CreateAPIView):
         order.objects.create(
             user=user_id,
             book=instance,
+            phone_number=request.data["phone_number"],
+            delivery_address=request.data["delivery_address"],
         )
         return Response()
 
@@ -103,7 +105,7 @@ class ListUserInformation(generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
-class ListUserOrders(generics.ListAPIView):
+class ListUserOrders(generics.ListAPIView, generics.CreateAPIView):
     queryset = order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
@@ -111,5 +113,11 @@ class ListUserOrders(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         orders = order.objects.filter(user=request.user)
         serializer = OrderSerializer(orders, many=True)
-        print(serializer.data)
         return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        return self.clear_history(request)
+
+    def clear_history(self, request):
+        order.objects.filter(user=request.user).delete()
+        return Response({"message": "orders history cleared"})

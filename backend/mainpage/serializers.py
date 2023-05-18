@@ -36,10 +36,33 @@ class OrderSerializer(serializers.ModelSerializer):
         source="author.username", required=False, allow_null=True
     )
     book = serializers.CharField(source="book_name", required=False, allow_null=True)
+    phone_number = serializers.CharField(required=True, allow_null=False)
+    delivery_address = serializers.CharField(required=True, allow_null=False)
 
     class Meta:
         model = order
-        fields = ("id", "user_name", "book")
+        fields = (
+            "id",
+            "user_name",
+            "book",
+            "phone_number",
+            "delivery_address",
+        )
+
+    def to_representation(self, instance):
+        representation = dict()
+        representation["Order ID"] = instance.id
+        representation["Username"] = instance.user.username
+        representation["First Name"] = instance.user.first_name
+        representation["Last Name"] = instance.user.last_name
+        representation["Book Name"] = instance.book.book_name
+        representation["Book Price"] = instance.book.price
+        representation["Book Author"] = instance.book.author.username
+        representation["Phone Number"] = instance.phone_number
+        representation["Delivery address"] = instance.delivery_address
+        representation["Order Date"] = instance.date
+
+        return representation
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

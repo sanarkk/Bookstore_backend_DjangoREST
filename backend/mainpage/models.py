@@ -18,6 +18,8 @@ class order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(book, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+    phone_number = models.CharField(max_length=20)
+    delivery_address = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'{self.user.username} | {self.book.book_name}'
+        return f"{self.user.username} | {self.book.book_name}"
