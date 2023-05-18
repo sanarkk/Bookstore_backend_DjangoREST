@@ -1,11 +1,11 @@
 # Bookstore Backend
 *Project created by using Django Rest Framework technologies*
 
-> About
+## About
 
-This backend was developed for book store where users can order ans sell books.
+This backend was developed for book store where users can order and sell books.
 
-> How to start
+## How to start
 
 - pip install -r requirements.txt
 - cd backend/
@@ -13,7 +13,7 @@ This backend was developed for book store where users can order ans sell books.
 - ./manage.py migrate
 - ./manage.py runserver
 
-> Routes
+## Routes
 
 - 127.0.0.1:8000/main/ ---> *Page which displays all books.*
 - 127.0.0.1:8000/create/ ---> *Page which allows to place book for sale, but only after completed auth.*
@@ -28,9 +28,13 @@ This backend was developed for book store where users can order ans sell books.
 - 127.0.0.1:8000/auth/logout/ ---> *Page which allows to logout.*
 - 127.0.0.1:8000/admin/ ---> *Page which allows to access tables and data by admin panel, but only after admin auth.*
 
-> How to create admin account
+## How to create an admin account
 
 - Make sure that you are in 'backend/' directory
 - ./manage.py createsuperuser
+
+## Learn more about technologies
+
+Learn more about [Django Rest Framework](https://www.django-rest-framework.org/)
 
 <sup>created by sanarkk</sup>
