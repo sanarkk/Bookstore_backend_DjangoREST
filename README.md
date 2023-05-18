@@ -11,7 +11,7 @@ This backend was developed for book store where users can order ans sell books.
 - cd backend/
 - ./manage.py makemigrations
 - ./manage.py migrate
-- ./manage.py run server
+- ./manage.py runserver
 
 > Routes
 
