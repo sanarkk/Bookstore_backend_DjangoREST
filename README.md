@@ -26,5 +26,11 @@ This backend was developed for book store where users can order ans sell books.
 - 127.0.0.1:8000/auth/register/ ---> *Page which allows to register an account.*
 - 127.0.0.1:8000/auth/login/ ---> *Page which allows to login.*
 - 127.0.0.1:8000/auth/logout/ ---> *Page which allows to logout.*
+- 127.0.0.1:8000/admin/ ---> *Page which allows to access tables and data by admin panel, but only after admin auth.*
+
+> How to create admin account
+
+- Make sure that you are in 'backend/' directory
+- ./manage.py createsuperuser
 
 <sup>created by sanarkk</sup>
