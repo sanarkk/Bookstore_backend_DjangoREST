@@ -65,6 +65,18 @@ class UpdateBookAPI(generics.UpdateAPIView):
             return Response({"message": "not updated"})
 
 
+class GetOrderAPI(generics.RetrieveAPIView):
+    queryset = book.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "pk"
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = BookSerializer(instance)
+        return Response(serializer.data)
+
+
 class CreateOrderAPI(generics.CreateAPIView):
     queryset = book.objects.all()
     serializer_class = OrderSerializer
@@ -73,11 +85,6 @@ class CreateOrderAPI(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         return self.create_order(request)
-
-    def get(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = BookSerializer(instance)
-        return Response(serializer.data)
 
     def create_order(self, request):
         instance = self.get_object()
@@ -97,6 +104,7 @@ class ListUserInformation(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
+
     # lookup_field = "pk"
 
     def get(self, request, *args, **kwargs):
@@ -106,7 +114,7 @@ class ListUserInformation(generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
-class ListUserOrders(generics.ListAPIView, generics.CreateAPIView):
+class ListUserOrders(generics.ListAPIView):
     queryset = order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
@@ -115,6 +123,12 @@ class ListUserOrders(generics.ListAPIView, generics.CreateAPIView):
         orders = order.objects.filter(user=request.user)
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
+
+
+class ClearUserOrders(generics.CreateAPIView):
+    queryset = order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated, IsMyProfile]
 
     def post(self, request, *args, **kwargs):
         return self.clear_history(request)

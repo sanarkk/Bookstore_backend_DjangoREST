@@ -32,6 +32,8 @@ class RegisterAPI(generics.GenericAPIView):
 
 
 class LogoutAPI(generics.GenericAPIView):
+    serializer_class = 
+
     def get(self, request):
         return self.logout_user(request)
 
