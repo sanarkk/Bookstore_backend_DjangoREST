@@ -92,21 +92,13 @@ WSGI_APPLICATION = "bookstore.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.postgresql_psycopg2",
-#        "HOST": os.environ.get("DB_HOST"),
-#        "NAME": os.environ.get("DB_NAME"),
-#        "USER": os.environ.get("DB_USER"),
-#        "PASSWORD": os.environ.get("DB_PASS"),
-#    }
-# }
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "",  # This is where you put the name of the db file.
-        # If one doesn't exist, it will be created at migration time.
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "HOST": "db",
+        "NAME": "bookstore_db",
+        "USER": "bookstore_user",
+        "PASSWORD": "bookstore_user_/1",
     }
 }
 
