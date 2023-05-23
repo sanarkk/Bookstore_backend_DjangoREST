@@ -11,6 +11,7 @@ from .serializers import (
     UpdateBookSerializer,
     OrderSerializer,
     UserProfileSerializer,
+    UpdateUserProfileSerializer,
 )
 
 
@@ -105,13 +106,27 @@ class ListUserInformation(generics.RetrieveAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
 
-    # lookup_field = "pk"
-
     def get(self, request, *args, **kwargs):
         user = User.objects.get(username=request.user.username)
         print(user)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+
+
+class UpdateUserInformation(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UpdateUserProfileSerializer
+    permission_classes = [IsAuthenticated, IsMyProfile]
+
+    def update(self, request, *args, **kwargs):
+        user = User.objects.get(username=request.user.username)
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "updated"})
+        else:
+            return Response({"message": "not updated"})
 
 
 class ListUserOrders(generics.ListAPIView):

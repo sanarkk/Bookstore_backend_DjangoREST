@@ -4,7 +4,6 @@ from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login
-from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import RegisterSerializer, LoginSerializer
 

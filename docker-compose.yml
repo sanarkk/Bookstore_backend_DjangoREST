@@ -3,7 +3,7 @@ version: "3.9"
 services:
   backend:
       build: .
-      command: python manage.py runserver 0.0.0.0:8000 && python manage.py makemigrations && python manage.py migrate
+      command: python manage.py runserver 0.0.0.0:8000
       volumes:
         - ./backend:/backend-bookstore-drf
       ports:
@@ -18,5 +18,10 @@ services:
       POSTGRES_PASSWORD: bookstore_user_/1
     volumes:
       - pgdata:/var/lib/posgresql/data
+  web_migrations:
+    build: .
+    command: python manage.py migrate
+    volumes:
+      - ./backend:/backend-bookstore-drf
 volumes:
   pgdata:
