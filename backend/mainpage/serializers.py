@@ -46,6 +46,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "user_name",
             "book",
             "phone_number",
+            "country",
             "delivery_address",
         )
 
@@ -58,6 +59,7 @@ class OrderSerializer(serializers.ModelSerializer):
         representation["Book Name"] = instance.book.book_name
         representation["Book Price"] = instance.book.price
         representation["Book Author"] = instance.book.author.username
+        representation["Country"] = instance.country
         representation["Phone Number"] = instance.phone_number
         representation["Delivery address"] = instance.delivery_address
         representation["Order Date"] = instance.date

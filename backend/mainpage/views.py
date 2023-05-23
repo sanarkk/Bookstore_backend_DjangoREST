@@ -96,6 +96,7 @@ class CreateOrderAPI(generics.CreateAPIView):
             user=user_id,
             book=instance,
             phone_number=request.data["phone_number"],
+            country=request.data["country"],
             delivery_address=request.data["delivery_address"],
         )
         return Response()

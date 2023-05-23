@@ -15,10 +15,17 @@ class book(models.Model):
 
 
 class order(models.Model):
+    class DeliveryCountry(models.TextChoices):
+        CANADA = "CA", ("Canada")
+        UKRAINE = "UA", ("Ukraine")
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(book, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     phone_number = models.CharField(max_length=20)
+    country = models.CharField(
+        max_length=2, choices=DeliveryCountry.choices, default=DeliveryCountry.UKRAINE
+    )
     delivery_address = models.CharField(max_length=100)
 
     def __str__(self):
