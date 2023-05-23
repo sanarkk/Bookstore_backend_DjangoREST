@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import book, order
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -36,7 +37,17 @@ class OrderSerializer(serializers.ModelSerializer):
         source="author.username", required=False, allow_null=True
     )
     book = serializers.CharField(source="book_name", required=False, allow_null=True)
-    phone_number = serializers.CharField(required=True, allow_null=False)
+    phone_number = serializers.CharField(
+        max_length=15,
+        required=True,
+        allow_null=False,
+        validators=[
+            RegexValidator(
+                r"^\+?1?\d{9,15}$",
+                message="Enter a Valid Phone Number",
+            )
+        ],
+    )
     delivery_address = serializers.CharField(required=True, allow_null=False)
 
     class Meta:
@@ -68,9 +79,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    language = serializers.CharField(source="MyUser.language")
+
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name")
+        fields = ("username", "first_name", "last_name", "language")
 
 
 class UpdateUserProfileSerializer(serializers.ModelSerializer):

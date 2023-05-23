@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.utils.translation",
     "rest_framework",
     "rest_framework.authtoken",
     "drf_yasg",
@@ -133,6 +134,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+LANGUAGES = (
+    ("en-us", ("English")),
+    ("uk", ("Ukrainian")),
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
