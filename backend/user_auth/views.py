@@ -5,6 +5,8 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from .serializers import RegisterSerializer, LoginSerializer
 
 
@@ -43,6 +45,10 @@ class LogoutAPI(generics.GenericAPIView):
 
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginSerializer
+
+    @ensure_csrf_cookie
+    def token_security(request):
+        return Response({"status": "gave a cookie"})
 
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data, context={"request": request})

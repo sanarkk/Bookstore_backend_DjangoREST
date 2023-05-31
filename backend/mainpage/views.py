@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
@@ -54,6 +54,8 @@ class UpdateBookAPI(generics.UpdateAPIView):
     lookup_field = "pk"
     serializer_class = UpdateBookSerializer
     permission_classes = [IsAuthenticated, IsOwner]
+    http_method_names = ["put"]
+
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -118,6 +120,7 @@ class UpdateUserInformation(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UpdateUserProfileSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
+    http_method_names = ["put"]
 
     def update(self, request, *args, **kwargs):
         user = User.objects.get(username=request.user.username)
@@ -141,14 +144,12 @@ class ListUserOrders(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ClearUserOrders(generics.CreateAPIView):
+class ClearUserOrders(generics.DestroyAPIView):
     queryset = order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
 
-    def post(self, request, *args, **kwargs):
-        return self.clear_history(request)
-
-    def clear_history(self, request):
-        order.objects.filter(user=request.user).delete()
-        return Response({"message": "orders history cleared"})
+    def delete(self, request, *args, **kwargs):
+        objects = order.objects.filter(user=request.user)
+        objects.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
