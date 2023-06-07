@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import book, order
+from .models import Book, Order
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
@@ -8,7 +8,7 @@ class BookSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source="author.username")
 
     class Meta:
-        model = book
+        model = Book
         fields = (
             "id",
             "book_name",
@@ -23,20 +23,16 @@ class CreateBookSerializer(serializers.Serializer):
     price = serializers.IntegerField()
 
     def create(self, validated_data):
-        return book.objects.create(**validated_data)
+        return Book.objects.create(**validated_data)
 
 
 class UpdateBookSerializer(serializers.ModelSerializer):
     class Meta:
-        model = book
+        model = Book
         fields = ("id", "book_name", "price")
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(
-        source="author.username", required=False, allow_null=True
-    )
-    book = serializers.CharField(source="book_name", required=False, allow_null=True)
     phone_number = serializers.CharField(
         max_length=15,
         required=True,
@@ -51,11 +47,9 @@ class OrderSerializer(serializers.ModelSerializer):
     delivery_address = serializers.CharField(required=True, allow_null=False)
 
     class Meta:
-        model = order
+        model = Order
         fields = (
             "id",
-            "user_name",
-            "book",
             "phone_number",
             "country",
             "delivery_address",

@@ -9,22 +9,20 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
 from datetime import timedelta
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-d3v_^&h1x6v-%#ab!(s**sw4k6j^@@mb%6dk$iszc(ms^1%ymc"
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = ["*"]
 
@@ -96,10 +94,10 @@ WSGI_APPLICATION = "bookstore.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "HOST": "db",
-        "NAME": "bookstore_db",
-        "USER": "bookstore_user",
-        "PASSWORD": "bookstore_user_/1",
+        "HOST": os.environ['HOST'],
+        "NAME": os.environ['NAME'],
+        "USER": os.environ['USERNAME'],
+        "PASSWORD": os.environ['PASSWORD'],
     }
 }
 
@@ -109,16 +107,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+                ".NumericPasswordValidator",
     },
 ]
 

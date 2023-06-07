@@ -1,18 +1,29 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from mainpage.models import languages
+from mainpage.models import Languages
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True, allow_null=False)
     last_name = serializers.CharField(required=True, allow_null=False)
-    language = serializers.ChoiceField(source="MyUser.language", choices=languages)
+    language = serializers.ChoiceField(source="MyUser.language",
+                                       choices=Languages)
 
     class Meta:
         model = User
-        fields = ("id", "username", "password", "first_name", "last_name", "language")
-        extra_kwargs = {"id": {"read_only": True}, "password": {"write_only": True}}
+        fields = (
+            "id",
+            "username",
+            "password",
+            "first_name",
+            "last_name",
+            "language"
+        )
+        extra_kwargs = {
+            "id": {"read_only": True},
+            "password": {"write_only": True}
+        }
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -54,3 +65,9 @@ class LoginSerializer(serializers.ModelSerializer):
 
         attrs["user"] = user
         return attrs
+
+
+class LogoutSerializer(serializers.Serializer):
+    class Meta:
+        model = User
+        fields = ("username",)

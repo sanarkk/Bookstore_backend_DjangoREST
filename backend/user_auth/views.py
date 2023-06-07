@@ -7,7 +7,7 @@ from django.contrib.auth import logout, login
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, LogoutSerializer
 
 
 # Create your views here.
@@ -33,11 +33,13 @@ class RegisterAPI(generics.GenericAPIView):
 
 
 class LogoutAPI(generics.GenericAPIView):
+    serializer_class = LogoutSerializer
+
     def get(self, request):
         return self.logout_user(request)
 
     def logout_user(self, request):
-        if logout(request) == None:
+        if logout(request) is None:
             return Response({"response": "success"})
         else:
             return Response({"response": "failed"})
@@ -51,7 +53,10 @@ class LoginAPI(generics.GenericAPIView):
         return Response({"status": "gave a cookie"})
 
     def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data, context={"request": request})
+        serializer = LoginSerializer(
+            data=request.data,
+            context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         login(request, user)
