@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Book, Order
+from .models import Book, Order, UserProfile
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
@@ -73,7 +73,12 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    language = serializers.CharField(source="MyUser.language")
+    language = serializers.CharField()
+    username = serializers.CharField(source="user.username")
+    first_name = serializers.CharField(source="user.first_name")
+    last_name = serializers.CharField(source="user.last_name")
+
+    # language = serializers.CharField()
 
     class Meta:
         model = User

@@ -7,11 +7,11 @@ from django.core.validators import RegexValidator
 
 
 class Languages(models.TextChoices):
-    UKRAINIAN = "UA", ("Ukrainian")
-    ENGLISH = "EN", ("English")
+    UKRAINIAN = "UA", "Ukrainian"
+    ENGLISH = "EN", "English"
 
 
-class MyUser(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     language = models.CharField(
         max_length=2, choices=Languages.choices, default=Languages.ENGLISH

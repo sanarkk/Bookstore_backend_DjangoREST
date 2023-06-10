@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 
 from .permissions import IsOwner, IsMyProfile
-from .models import Book, Order
+from .models import Book, Order, UserProfile
 from .serializers import (
     BookSerializer,
     CreateBookSerializer,
@@ -170,8 +170,7 @@ class ListUserInformation(generics.RetrieveAPIView):
         tags=["Profile"],
     )
     def get(self, request, *args, **kwargs):
-        user = User.objects.get(username=request.user.username)
-        print(user)
+        user = UserProfile.objects.get(id=request.user.id)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
