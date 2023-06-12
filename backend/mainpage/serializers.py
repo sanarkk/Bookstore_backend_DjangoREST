@@ -81,7 +81,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     # language = serializers.CharField()
 
     class Meta:
-        model = User
+        model = UserProfile
         fields = ("username", "first_name", "last_name", "language")
 
 

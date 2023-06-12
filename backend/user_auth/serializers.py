@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from mainpage.models import Languages
+from mainpage.models import Languages, UserProfile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True, allow_null=False)
     last_name = serializers.CharField(required=True, allow_null=False)
-    language = serializers.ChoiceField(source="MyUser.language",
+    language = serializers.ChoiceField(
                                        choices=Languages)
 
     class Meta:
@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "password",
             "first_name",
             "last_name",
-            "language"
+            "language",
         )
         extra_kwargs = {
             "id": {"read_only": True},
@@ -26,11 +26,17 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print(validated_data)
         user = User.objects.create_user(
             username=validated_data["username"],
             password=validated_data["password"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
+            #userprofile=validated_data["MyUser"],
+        )
+        UserProfile.objects.get_or_create(
+            user=user,
+            language=validated_data["language"]
         )
         return user
 
