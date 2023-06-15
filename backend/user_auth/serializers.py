@@ -1,14 +1,14 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from mainpage.models import Languages, UserProfile
-
+from mainpage.models import UserProfile
+from bookstore.settings import LANGUAGES
 
 class RegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True, allow_null=False)
     last_name = serializers.CharField(required=True, allow_null=False)
     language = serializers.ChoiceField(
-                                       choices=Languages)
+                                       choices=LANGUAGES)
 
     class Meta:
         model = User

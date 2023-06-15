@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-
-
+from bookstore.settings import LANGUAGE_CODE, LANGUAGES
 # Create your models here.
 
 
@@ -14,7 +13,7 @@ class Languages(models.TextChoices):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     language = models.CharField(
-        max_length=2, choices=Languages.choices, default=Languages.ENGLISH
+        max_length=7, choices=LANGUAGES, default=LANGUAGE_CODE
     )
     objects = models.Manager()
 
