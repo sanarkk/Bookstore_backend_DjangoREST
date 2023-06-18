@@ -170,8 +170,8 @@ class ListUserInformation(generics.RetrieveAPIView):
         tags=["Profile"],
     )
     def get(self, request, *args, **kwargs):
-        user = UserProfile.objects.get(user_id=request.user.id)
         print(request.LANGUAGE_CODE)
+        user = UserProfile.objects.get(user_id=request.user.id)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 

@@ -5,11 +5,6 @@ from bookstore.settings import LANGUAGE_CODE, LANGUAGES
 # Create your models here.
 
 
-class Languages(models.TextChoices):
-    UKRAINIAN = "UA", "Ukrainian"
-    ENGLISH = "EN", "English"
-
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     language = models.CharField(

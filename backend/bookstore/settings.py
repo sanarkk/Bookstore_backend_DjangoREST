@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG']
 
@@ -47,19 +48,18 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "mainpage.middleware.CustomLocaleMiddleware",
+    #"django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    #"mainpage.middleware.CustomLocaleMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    'django.middleware.locale.LocaleMiddleware',
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     )
 }
@@ -130,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "UTC"
 
@@ -141,6 +141,8 @@ USE_TZ = True
 LANGUAGES = (
     ("en-us", ("English")),
     ("uk", ("Ukrainian")),
+    ("es", ("Spanish")),
+
 )
 
 # Static files (CSS, JavaScript, Images)
