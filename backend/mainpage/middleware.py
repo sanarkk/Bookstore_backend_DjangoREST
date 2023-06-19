@@ -4,19 +4,9 @@ from django.utils.deprecation import MiddlewareMixin
 
 class CustomLocaleMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        #request.LANGUAGE_CODE = 'uk'
-        #print(request.user)
-        #print(request.user.userprofile.language)
-        #print(request.__dict__)
-        #print(request.user.is_authenticated)
         try:
-            if request.user.is_authenticated():
-               #print(f"1: {request.LANGUAGE_CODE}")
-                translation.activate(request.user.userprofile.language)
-               # CANT SEE LANGUAGE CODE
-
-                request.LANGUAGE_CODE = request.user.userprofile.language
-                print(f"2: {request.LANGUAGE_CODE}")
+            if request.user.is_authenticated:
+                translation.activate(request.user.profile.language)
+                request.LANGUAGE_CODE = request.user.profile.language
         except:
-            #request.LANGUAGE_CODE = "en"
-            print("iamma here")
+            request.LANGUAGE_CODE = "en"

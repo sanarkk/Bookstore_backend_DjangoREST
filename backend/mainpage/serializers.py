@@ -1,7 +1,10 @@
-from rest_framework import serializers
-from .models import Book, Order, UserProfile
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework import serializers
+
+from .models import Book, Order, Profile
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -40,7 +43,7 @@ class OrderSerializer(serializers.ModelSerializer):
         validators=[
             RegexValidator(
                 r"^\+?1?\d{9,15}$",
-                message="Enter a Valid Phone Number",
+                message=_("Enter a Valid Phone Number"),
             )
         ],
     )
@@ -79,7 +82,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(source="user.last_name")
 
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = ("username", "first_name", "last_name", "language")
 
 

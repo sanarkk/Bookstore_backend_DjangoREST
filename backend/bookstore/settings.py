@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from datetime import timedelta
+from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.utils.translation",
     "rest_framework",
+    "rosetta",
     "rest_framework.authtoken",
     "drf_yasg",
     "mainpage",
@@ -50,7 +52,6 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "mainpage.middleware.CustomLocaleMiddleware",
-    #"django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -60,6 +61,7 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     )
 }
@@ -139,11 +141,13 @@ USE_I18N = True
 USE_TZ = True
 
 LANGUAGES = (
-    ("en-us", ("English")),
-    ("uk", ("Ukrainian")),
-    ("es", ("Spanish")),
-
+    ("en-us", _("English")),
+    ("uk", _("Ukrainian")),
 )
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale/')
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

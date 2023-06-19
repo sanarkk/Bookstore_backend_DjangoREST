@@ -1,11 +1,13 @@
+from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_auto_schema
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
-from drf_yasg.utils import swagger_auto_schema
 
 from .permissions import IsOwner, IsMyProfile
-from .models import Book, Order, UserProfile
+from .models import Book, Order, Profile
 from .serializers import (
     BookSerializer,
     CreateBookSerializer,
@@ -53,7 +55,8 @@ class CreateBookAPI(generics.CreateAPIView):
         user_id = request.user.id
         serializer.save(author_id=user_id)
         print(serializer.data)
-        return Response({"message": "created"})
+        message = _("Book created")
+        return Response({f"{message}"}, status=status.HTTP_201_CREATED)
 
 
 class RetrieveBookAPI(generics.RetrieveAPIView):
@@ -97,12 +100,14 @@ class UpdateBookAPI(generics.UpdateAPIView):
             instance,
             data=request.data,
             partial=True)
+        message_updated = _("Book updated")
+        message_not_updated = _("Book not updated")
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save(author=self.request.user)
-            return Response({"message": "updated"})
+            return Response({"Message": f"{message_updated}"}, status=status.HTTP_200_OK)
         else:
-            return Response({"message": "not updated"})
+            return Response({f"{message_not_updated}"})
 
 
 class GetOrderAPI(generics.RetrieveAPIView):
@@ -154,7 +159,8 @@ class CreateOrderAPI(generics.CreateAPIView):
             country=request.data["country"],
             delivery_address=request.data["delivery_address"],
         )
-        return Response()
+        message = _("Order created")
+        return Response({f"{message}"}, status=status.HTTP_201_CREATED)
 
 
 class ListUserInformation(generics.RetrieveAPIView):
@@ -170,8 +176,8 @@ class ListUserInformation(generics.RetrieveAPIView):
         tags=["Profile"],
     )
     def get(self, request, *args, **kwargs):
-        print(request.LANGUAGE_CODE)
-        user = UserProfile.objects.get(user_id=request.user.id)
+        user = Profile.objects.get(user=request.user)
+        print(user.user.username)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
@@ -192,12 +198,14 @@ class UpdateUserInformation(generics.UpdateAPIView):
     def put(self, request, *args, **kwargs):
         user = User.objects.get(username=request.user.username)
         serializer = self.get_serializer(user, data=request.data, partial=True)
+        message_updated = _("User profile updated")
+        message_not_updated = _("User profile not updated")
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response({"message": "updated"})
+            return Response({f"{message_updated}"}, status=status.HTTP_200_OK)
         else:
-            return Response({"message": "not updated"})
+            return Response({f"{message_not_updated}"})
 
 
 class ListUserOrders(generics.ListAPIView):
@@ -215,7 +223,8 @@ class ListUserOrders(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         orders = Order.objects.filter(user=request.user)
         serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data)
+        message = _("Information")
+        return Response({f"{serializer.data}"})
 
 
 class ClearUserOrders(generics.DestroyAPIView):

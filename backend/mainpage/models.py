@@ -1,16 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.utils.translation import gettext_lazy as _
+
 from bookstore.settings import LANGUAGE_CODE, LANGUAGES
+
+
 # Create your models here.
 
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     language = models.CharField(
         max_length=7, choices=LANGUAGES, default=LANGUAGE_CODE
     )
     objects = models.Manager()
+
+    class Meta:
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
+
+    def __str__(self):
+        return f"{self.user.username} - {self.language}"
 
 
 class Book(models.Model):
@@ -20,14 +31,18 @@ class Book(models.Model):
 
     objects = models.Manager()
 
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
+
     def __str__(self):
         return self.book_name
 
 
 class Order(models.Model):
     class DeliveryCountry(models.TextChoices):
-        CANADA = "CA", ("Canada")
-        UKRAINE = "UA", ("Ukraine")
+        CANADA = "CA", _("Canada")
+        UKRAINE = "UA", _("Ukraine")
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
@@ -39,8 +54,8 @@ class Order(models.Model):
         validators=[
             RegexValidator(
                 regex=r"^\+?1?\d{9,15}$",
-                message="Phone number must be entered in the format "
-                        "'+123456789'. Up to 15 digits allowed.",
+                message=_("Phone number must be entered in the format "
+                          "'+123456789'. Up to 15 digits allowed."),
             ),
         ],
     )
@@ -52,6 +67,10 @@ class Order(models.Model):
     delivery_address = models.CharField(max_length=100)
 
     objects = models.Manager()
+
+    class Meta:
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
 
     def __str__(self):
         return f"{self.user.username} | {self.book.book_name}"

@@ -1,14 +1,18 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
-from mainpage.models import UserProfile
+
+from mainpage.models import Profile
 from bookstore.settings import LANGUAGES
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True, allow_null=False)
     last_name = serializers.CharField(required=True, allow_null=False)
     language = serializers.ChoiceField(
-                                       choices=LANGUAGES)
+        choices=LANGUAGES)
 
     class Meta:
         model = User
@@ -32,9 +36,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data["password"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            #userprofile=validated_data["MyUser"],
         )
-        UserProfile.objects.get_or_create(
+        Profile.objects.get_or_create(
             user=user,
             language=validated_data["language"]
         )
@@ -42,18 +45,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("username", "password")
-
     username = serializers.CharField(max_length=255)
     password = serializers.CharField(
-        label=("Password"),
+        label=_("Password"),
         style={"input_type": "password"},
         trim_whitespace=False,
         max_length=128,
         write_only=True,
     )
+
+    class Meta:
+        model = User
+        fields = ("username", "password")
 
     def validate(self, attrs):
         username = attrs.get("username")
@@ -63,10 +66,10 @@ class LoginSerializer(serializers.ModelSerializer):
             user = authenticate(username=username, password=password)
 
             if not user:
-                msg = "Unable to log in with provided credentials."
+                msg = _("Unable to log in with provided credentials.")
                 raise serializers.ValidationError(msg, code="authorization")
         else:
-            msg = 'Must include "username" and "password".'
+            msg = _('Must include "username" and "password".')
             raise serializers.ValidationError(msg, code="authorization")
 
         attrs["user"] = user
@@ -76,4 +79,4 @@ class LoginSerializer(serializers.ModelSerializer):
 class LogoutSerializer(serializers.Serializer):
     class Meta:
         model = User
-        fields = ("username",)
+        fields = ("username", )

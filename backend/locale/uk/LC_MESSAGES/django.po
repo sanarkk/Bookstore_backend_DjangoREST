@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-19 17:11-0500\n"
+"PO-Revision-Date: 2023-06-19 21:59+0000\n"
+"Last-Translator:   <>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
+
+#: bookstore/settings.py:144
+msgid "English"
+msgstr "Англійська"
+
+#: bookstore/settings.py:145
+msgid "Ukrainian"
+msgstr "Українська"
+
+#: mainpage/models.py:44
+msgid "Canada"
+msgstr "Канада"
+
+#: mainpage/models.py:45
+msgid "Ukraine"
+msgstr "Україна"
+
+#: mainpage/models.py:57
+msgid ""
+"Phone number must be entered in the format '+123456789'. Up to 15 digits "
+"allowed."
+msgstr ""
+"Номер телефону має бути введений в форматі '+123456789'. Дозволена довжина "
+"до 15 цифер."
+
+#: mainpage/serializers.py:46
+msgid "Enter a Valid Phone Number"
+msgstr "Введіть дійсний номер телефону."
+
+#: mainpage/views.py:58
+msgid "Book created"
+msgstr "Книга створена"
+
+#: mainpage/views.py:103
+msgid "Book updated"
+msgstr "Книга обновлена"
+
+#: mainpage/views.py:104
+msgid "Book not updated"
+msgstr "Книга не обновлена"
+
+#: mainpage/views.py:162
+msgid "Order created"
+msgstr "Замовлення створене"
+
+#: mainpage/views.py:201
+msgid "User profile updated"
+msgstr "Профіль обновлено"
+
+#: mainpage/views.py:202
+msgid "User profile not updated"
+msgstr "Профіль не обновлено"
+
+#: mainpage/views.py:226
+msgid "Information"
+msgstr "Інформація"
+
+#: user_auth/serializers.py:50
+msgid "Password"
+msgstr "Пароль"
+
+#: user_auth/serializers.py:69
+msgid "Unable to log in with provided credentials."
+msgstr "Навдалось увійти з вказаними данними."
+
+#: user_auth/serializers.py:72
+msgid "Must include \"username\" and \"password\"."
+msgstr "Повинно включати \"логін\" і \"пароль\"."
+
+#: user_auth/views.py:19 user_auth/views.py:41
+msgid "Account created"
+msgstr "Профіль створено"
+
+#: user_auth/views.py:20 user_auth/views.py:42
+msgid "Account not created"
+msgstr "Профіль не створено"
+
+#: user_auth/views.py:56
+msgid "Logged in"
+msgstr "Вхід здійснено"
+
+#: user_auth/views.py:60
+msgid "Successfully gave a cookie"
+msgstr "Успішно надано кукі"
+
+#~ msgid "Message"
+#~ msgstr "Повідомленн"
+
+#~ msgid "Test translate"
+#~ msgstr "Тестовий переклад"

@@ -4,8 +4,8 @@ from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login
-
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.translation import gettext_lazy as _
 
 from .serializers import RegisterSerializer, LoginSerializer, LogoutSerializer
 
@@ -16,6 +16,8 @@ class RegisterAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        message_success = _("Account created")
+        message_failed = _("Account not created")
 
         for user in User.objects.all():
             if not user:
@@ -29,28 +31,34 @@ class RegisterAPI(generics.GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             Token.objects.create(user=user)
-        return Response({"status": "created"})
+            return Response({f"{message_success}"})
+        else:
+            return Response({f"{message_failed}"})
 
 
 class LogoutAPI(generics.GenericAPIView):
     serializer_class = LogoutSerializer
+    message_success = _("Logged out")
+    message_failed = _("Not logged out")
 
     def get(self, request):
         return self.logout_user(request)
 
     def logout_user(self, request):
         if logout(request) is None:
-            return Response({"response": "success"})
+            return Response({f"{self.message_success}"})
         else:
-            return Response({"response": "failed"})
+            return Response({f"{self.message_failed}"})
 
 
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginSerializer
+    message_login = _("Logged in")
 
     @ensure_csrf_cookie
     def token_security(request):
-        return Response({"status": "gave a cookie"})
+        message = _("Successfully gave a cookie")
+        return Response({f"{message}"})
 
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(
@@ -61,4 +69,4 @@ class LoginAPI(generics.GenericAPIView):
         user = serializer.validated_data["user"]
         login(request, user)
         Token.objects.get_or_create(user=user)
-        return Response({"status": "loggined"})
+        return Response({f"{self.message_login}"})
