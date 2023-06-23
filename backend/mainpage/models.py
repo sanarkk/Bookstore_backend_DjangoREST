@@ -25,9 +25,17 @@ class Profile(models.Model):
 
 
 class Book(models.Model):
+
+    class BookStatus(models.TextChoices):
+        ACTIVE = "Active", _("Active")
+        INACTIVE = "Inactive", _("Inactive")
+
     author = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     book_name = models.CharField(max_length=60)
     price = models.IntegerField()
+    status = models.CharField(
+        max_length=10, choices=BookStatus.choices, default=BookStatus.ACTIVE
+    )
 
     objects = models.Manager()
 

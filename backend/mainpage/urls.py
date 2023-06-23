@@ -10,6 +10,7 @@ from .views import (
     UpdateUserInformation,
     ListUserOrders,
     ClearUserOrders,
+    ListUserListedBooks,
 )
 
 urlpatterns = [
@@ -27,4 +28,6 @@ urlpatterns = [
     path("profile/orders", ListUserOrders.as_view(), name="ListOrders"),
     path("profile/orders/clear",
          ClearUserOrders.as_view(), name="ClearOrders"),
+    path("profile/books",
+         ListUserListedBooks.as_view(), name="UserListedBooks"),
 ]

@@ -17,6 +17,7 @@ class BookSerializer(serializers.ModelSerializer):
             "book_name",
             "price",
             "user_name",
+            "status",
         )
         extra_kwargs = {"user_name": {"read_only": True}}
 
@@ -26,6 +27,7 @@ class CreateBookSerializer(serializers.Serializer):
     price = serializers.IntegerField()
 
     def create(self, validated_data):
+        print(validated_data)
         return Book.objects.create(**validated_data)
 
 
@@ -70,7 +72,7 @@ class OrderSerializer(serializers.ModelSerializer):
         representation["Country"] = instance.country
         representation["Phone Number"] = instance.phone_number
         representation["Delivery address"] = instance.delivery_address
-        representation["Order Date"] = instance.date
+        representation["Order Date"] = instance.date.strftime('%d-%m-%Y')
 
         return representation
 
@@ -90,3 +92,11 @@ class UpdateUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("first_name", "last_name")
+
+
+class UserListedBooksSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source="author.username")
+
+    class Meta:
+        model = Book
+        fields = ("id", "author_name", "book_name", "price")

@@ -15,12 +15,13 @@ from .serializers import (
     OrderSerializer,
     UserProfileSerializer,
     UpdateUserProfileSerializer,
+    UserListedBooksSerializer,
 )
 
 
 # Create your views here.
 class ListBooksAPI(generics.ListAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE)
     serializer_class = BookSerializer
 
     @swagger_auto_schema(
@@ -149,18 +150,27 @@ class CreateOrderAPI(generics.CreateAPIView):
 
     def create_order(self, request):
         instance = self.get_object()
-        serializer = OrderSerializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user_id = request.user
-        Order.objects.create(
-            user=user_id,
-            book=instance,
-            phone_number=request.data["phone_number"],
-            country=request.data["country"],
-            delivery_address=request.data["delivery_address"],
-        )
-        message = _("Order created")
-        return Response({f"{message}"}, status=status.HTTP_201_CREATED)
+        book = Book.objects.filter(id=instance.id)
+        if instance.status == Book.BookStatus.ACTIVE:
+            if instance.author == request.user:
+                message = _("You cant but own book.")
+                return Response({f"{message}"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            serializer = OrderSerializer(instance, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user_id = request.user
+            Order.objects.create(
+                user=user_id,
+                book=instance,
+                phone_number=request.data["phone_number"],
+                country=request.data["country"],
+                delivery_address=request.data["delivery_address"],
+            )
+            book.update(status=Book.BookStatus.INACTIVE)
+            message = _("Order created")
+            return Response({f"{message}"}, status=status.HTTP_201_CREATED)
+        else:
+            message_2 = _("This book is inactive")
+            return Response({f"{message_2}"}, status=status.HTTP_204_NO_CONTENT)
 
 
 class ListUserInformation(generics.RetrieveAPIView):
@@ -223,8 +233,7 @@ class ListUserOrders(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         orders = Order.objects.filter(user=request.user)
         serializer = OrderSerializer(orders, many=True)
-        message = _("Information")
-        return Response({f"{serializer.data}"})
+        return Response(serializer.data)
 
 
 class ClearUserOrders(generics.DestroyAPIView):
@@ -243,3 +252,21 @@ class ClearUserOrders(generics.DestroyAPIView):
         objects = Order.objects.filter(user=request.user)
         objects.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ListUserListedBooks(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = UserListedBooksSerializer
+    permission_classes = [IsAuthenticated, IsMyProfile]
+
+    @swagger_auto_schema(
+        name="Get all user's listed books",
+        operation_description="This API endpoint allows"
+                              " user to get all the books which the user listed"
+                              ".[only if an user is authenticated]",
+        tags=["Profile"],
+    )
+    def get(self, request, *args, **kwargs):
+        books = Book.objects.filter(author=request.user)
+        serializer = self.get_serializer(books, many=True)
+        return Response(serializer.data)

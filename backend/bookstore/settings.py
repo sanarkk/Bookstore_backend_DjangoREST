@@ -63,7 +63,9 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
-    )
+    ),
+    'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
+
 }
 
 ROOT_URLCONF = "bookstore.urls"
@@ -148,6 +150,7 @@ LANGUAGES = (
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale/')
 ]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

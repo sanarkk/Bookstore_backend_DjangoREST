@@ -6,8 +6,8 @@ from .models import Order, Book, Profile
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ("author", "book_name", "price")
-    list_filter = ("price", )
+    list_display = ("author", "book_name", "price", "status")
+    list_filter = ("status", )
 
 
 @admin.register(Order)
