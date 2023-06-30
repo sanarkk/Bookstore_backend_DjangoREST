@@ -5,6 +5,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .permissions import IsOwner, IsMyProfile
 from .models import Book, Order, Profile
@@ -23,11 +24,116 @@ from .serializers import (
 class ListBooksAPI(generics.ListAPIView):
     queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE)
     serializer_class = BookSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('book_name', 'author__username')
+    ordering_fields = ('price',)
 
     @swagger_auto_schema(
         name="List all books",
         operation_description="This API endpoint allows "
                               "user to list all the books.",
+        tags=["Book"],
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ListFantasyBooksAPI(generics.ListAPIView):
+    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.FANTASY)
+    serializer_class = BookSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('book_name', 'author__username')
+    ordering_fields = ('price',)
+
+    @swagger_auto_schema(
+        name="List all fantasy books",
+        operation_description="This API endpoint allows "
+                              "user to list all the fantasy books.",
+        tags=["Book"],
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ListAdventureBooksAPI(generics.ListAPIView):
+    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.ADVENTURE)
+    serializer_class = BookSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('book_name', 'author__username')
+    ordering_fields = ('price',)
+
+    @swagger_auto_schema(
+        name="List all adventure books",
+        operation_description="This API endpoint allows "
+                              "user to list all the adventure books.",
+        tags=["Book"],
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ListRomanceBooksAPI(generics.ListAPIView):
+    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.ROMANCE)
+    serializer_class = BookSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('book_name', 'author__username')
+    ordering_fields = ('price',)
+
+    @swagger_auto_schema(
+        name="List all romance books",
+        operation_description="This API endpoint allows "
+                              "user to list all the romance books.",
+        tags=["Book"],
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ListDetectiveBooksAPI(generics.ListAPIView):
+    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.DETECTIVE)
+    serializer_class = BookSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('book_name', 'author__username')
+    ordering_fields = ('price',)
+
+    @swagger_auto_schema(
+        name="List all detective books",
+        operation_description="This API endpoint allows "
+                              "user to list all the detective books.",
+        tags=["Book"],
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ListThrillerBooksAPI(generics.ListAPIView):
+    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.THRILLER)
+    serializer_class = BookSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('book_name', 'author__username')
+    ordering_fields = ('price',)
+
+    @swagger_auto_schema(
+        name="List all thriller books",
+        operation_description="This API endpoint allows "
+                              "user to list all the thriller books.",
+        tags=["Book"],
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ListHistoricalBooksAPI(generics.ListAPIView):
+    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.HISTORICAL)
+    serializer_class = BookSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('book_name', 'author__username')
+    ordering_fields = ('price',)
+
+    @swagger_auto_schema(
+        name="List all historical books",
+        operation_description="This API endpoint allows "
+                              "user to list all the historical books.",
         tags=["Book"],
     )
     def get(self, request, *args, **kwargs):
@@ -106,7 +212,10 @@ class UpdateBookAPI(generics.UpdateAPIView):
 
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=self.request.user)
-            return Response({"Message": f"{message_updated}"}, status=status.HTTP_200_OK)
+            return Response(
+                {"Message": f"{message_updated}"},
+                status=status.HTTP_200_OK
+            )
         else:
             return Response({f"{message_not_updated}"})
 
@@ -154,8 +263,12 @@ class CreateOrderAPI(generics.CreateAPIView):
         if instance.status == Book.BookStatus.ACTIVE:
             if instance.author == request.user:
                 message = _("You cant but own book.")
-                return Response({f"{message}"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-            serializer = OrderSerializer(instance, data=request.data)
+                return Response(
+                    {f"{message}"},
+                    status=status.HTTP_405_METHOD_NOT_ALLOWED
+                )
+            serializer = OrderSerializer(instance,
+                                         data=request.data)
             serializer.is_valid(raise_exception=True)
             user_id = request.user
             Order.objects.create(
@@ -167,10 +280,16 @@ class CreateOrderAPI(generics.CreateAPIView):
             )
             book.update(status=Book.BookStatus.INACTIVE)
             message = _("Order created")
-            return Response({f"{message}"}, status=status.HTTP_201_CREATED)
+            return Response(
+                {f"{message}"},
+                status=status.HTTP_201_CREATED
+            )
         else:
             message_2 = _("This book is inactive")
-            return Response({f"{message_2}"}, status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                {f"{message_2}"},
+                status=status.HTTP_204_NO_CONTENT
+            )
 
 
 class ListUserInformation(generics.RetrieveAPIView):
@@ -187,7 +306,6 @@ class ListUserInformation(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         user = Profile.objects.get(user=request.user)
-        print(user.user.username)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
@@ -197,7 +315,6 @@ class UpdateUserInformation(generics.UpdateAPIView):
     serializer_class = UpdateUserProfileSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
     http_method_names = ["put"]
-
     @swagger_auto_schema(
         name="Update profile information",
         operation_description="This API endpoint allows "
@@ -206,8 +323,8 @@ class UpdateUserInformation(generics.UpdateAPIView):
         tags=["Profile"],
     )
     def put(self, request, *args, **kwargs):
-        user = User.objects.get(username=request.user.username)
-        serializer = self.get_serializer(user, data=request.data, partial=True)
+        profile = Profile.objects.get(user=request.user)
+        serializer = self.serializer_class(profile, data=request.data)
         message_updated = _("User profile updated")
         message_not_updated = _("User profile not updated")
 
@@ -262,7 +379,7 @@ class ListUserListedBooks(generics.ListAPIView):
     @swagger_auto_schema(
         name="Get all user's listed books",
         operation_description="This API endpoint allows"
-                              " user to get all the books which the user listed"
+                              "user to get all the books which the user listed"
                               ".[only if an user is authenticated]",
         tags=["Profile"],
     )

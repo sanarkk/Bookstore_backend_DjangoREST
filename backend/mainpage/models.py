@@ -25,10 +25,18 @@ class Profile(models.Model):
 
 
 class Book(models.Model):
-
     class BookStatus(models.TextChoices):
         ACTIVE = "Active", _("Active")
         INACTIVE = "Inactive", _("Inactive")
+
+    class BookGenre(models.TextChoices):
+        NONE = "None", _("None")
+        FANTASY = "Fantasy", _("Fantasy")
+        ADVENTURE = "Adventure", _("Adventure")
+        ROMANCE = "Romance", _("Romance")
+        DETECTIVE = "Detective", _("Detective")
+        THRILLER = "Thriller", _("Thriller")
+        HISTORICAL = "Historical", _("Historical")
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     book_name = models.CharField(max_length=60)
@@ -36,7 +44,11 @@ class Book(models.Model):
     status = models.CharField(
         max_length=10, choices=BookStatus.choices, default=BookStatus.ACTIVE
     )
-
+    genre = models.CharField(
+        max_length=20,
+        choices=BookGenre.choices,
+        default=BookGenre.NONE
+    )
     objects = models.Manager()
 
     class Meta:

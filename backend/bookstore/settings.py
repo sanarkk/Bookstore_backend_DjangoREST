@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.utils.translation",
+
     "rest_framework",
     "rosetta",
     "rest_framework.authtoken",
     "drf_yasg",
+
     "mainpage",
     "user_auth",
 ]
@@ -64,8 +66,6 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
-    'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
-
 }
 
 ROOT_URLCONF = "bookstore.urls"

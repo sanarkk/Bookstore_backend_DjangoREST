@@ -16,6 +16,7 @@ class BookSerializer(serializers.ModelSerializer):
             "id",
             "book_name",
             "price",
+            "genre",
             "user_name",
             "status",
         )
@@ -25,6 +26,7 @@ class BookSerializer(serializers.ModelSerializer):
 class CreateBookSerializer(serializers.Serializer):
     book_name = serializers.CharField()
     price = serializers.IntegerField()
+    genre = serializers.ChoiceField(choices=Book.BookGenre)
 
     def create(self, validated_data):
         print(validated_data)
@@ -89,9 +91,24 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UpdateUserProfileSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source="user.first_name")
+    last_name = serializers.CharField(source="user.last_name")
+
     class Meta:
-        model = User
-        fields = ("first_name", "last_name")
+        model = Profile
+        fields = ("first_name", "last_name", "language")
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user')
+        user = instance.user
+        user.first_name = user_data.get('first_name', user.first_name)
+        user.last_name = user_data.get('last_name', user.last_name)
+        user.save()
+
+        instance.language = validated_data.get('language', instance.language)
+        instance.save()
+
+        return instance
 
 
 class UserListedBooksSerializer(serializers.ModelSerializer):
