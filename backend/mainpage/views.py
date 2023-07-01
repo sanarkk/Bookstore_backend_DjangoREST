@@ -39,7 +39,10 @@ class ListBooksAPI(generics.ListAPIView):
 
 
 class ListFantasyBooksAPI(generics.ListAPIView):
-    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.FANTASY)
+    queryset = Book.objects.filter(
+        status=Book.BookStatus.ACTIVE,
+        genre=Book.BookGenre.FANTASY
+    )
     serializer_class = BookSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('book_name', 'author__username')
@@ -56,7 +59,10 @@ class ListFantasyBooksAPI(generics.ListAPIView):
 
 
 class ListAdventureBooksAPI(generics.ListAPIView):
-    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.ADVENTURE)
+    queryset = Book.objects.filter(
+        status=Book.BookStatus.ACTIVE,
+        genre=Book.BookGenre.ADVENTURE
+    )
     serializer_class = BookSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('book_name', 'author__username')
@@ -73,7 +79,10 @@ class ListAdventureBooksAPI(generics.ListAPIView):
 
 
 class ListRomanceBooksAPI(generics.ListAPIView):
-    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.ROMANCE)
+    queryset = Book.objects.filter(
+        status=Book.BookStatus.ACTIVE,
+        genre=Book.BookGenre.ROMANCE
+    )
     serializer_class = BookSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('book_name', 'author__username')
@@ -90,7 +99,10 @@ class ListRomanceBooksAPI(generics.ListAPIView):
 
 
 class ListDetectiveBooksAPI(generics.ListAPIView):
-    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.DETECTIVE)
+    queryset = Book.objects.filter(
+        status=Book.BookStatus.ACTIVE,
+        genre=Book.BookGenre.DETECTIVE
+    )
     serializer_class = BookSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('book_name', 'author__username')
@@ -107,7 +119,10 @@ class ListDetectiveBooksAPI(generics.ListAPIView):
 
 
 class ListThrillerBooksAPI(generics.ListAPIView):
-    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.THRILLER)
+    queryset = Book.objects.filter(
+        status=Book.BookStatus.ACTIVE,
+        genre=Book.BookGenre.THRILLER
+    )
     serializer_class = BookSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('book_name', 'author__username')
@@ -124,7 +139,10 @@ class ListThrillerBooksAPI(generics.ListAPIView):
 
 
 class ListHistoricalBooksAPI(generics.ListAPIView):
-    queryset = Book.objects.filter(status=Book.BookStatus.ACTIVE, genre=Book.BookGenre.HISTORICAL)
+    queryset = Book.objects.filter(
+        status=Book.BookStatus.ACTIVE,
+        genre=Book.BookGenre.HISTORICAL
+    )
     serializer_class = BookSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('book_name', 'author__username')
@@ -315,6 +333,7 @@ class UpdateUserInformation(generics.UpdateAPIView):
     serializer_class = UpdateUserProfileSerializer
     permission_classes = [IsAuthenticated, IsMyProfile]
     http_method_names = ["put"]
+
     @swagger_auto_schema(
         name="Update profile information",
         operation_description="This API endpoint allows "
