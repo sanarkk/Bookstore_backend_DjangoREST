@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-25 20:51-0500\n"
-"PO-Revision-Date: 2023-06-26 01:52+0000\n"
+"PO-Revision-Date: 2023-07-01 01:56+0000\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -112,14 +112,13 @@ msgid "Account not created"
 msgstr "Профіль не створено"
 
 #: user_auth/views.py:41
-#, fuzzy
 #| msgid "Logged in"
 msgid "Logged out"
-msgstr "Вхід здійснено"
+msgstr "Вихід здійснено"
 
 #: user_auth/views.py:42
 msgid "Not logged out"
-msgstr "Логін не здійснено"
+msgstr "Вихід не здійснено"
 
 #: user_auth/views.py:56
 msgid "Logged in"
